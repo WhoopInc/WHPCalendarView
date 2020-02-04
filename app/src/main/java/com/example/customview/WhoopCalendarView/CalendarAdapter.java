@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-class CalendarAdapter extends ArrayAdapter<Date> {
+class CalendarAdapter extends ArrayAdapter<DateCell> {
 
     private LayoutInflater inflater;
     HashSet<Date> eventDays = new HashSet<>();
@@ -38,7 +38,7 @@ class CalendarAdapter extends ArrayAdapter<Date> {
         this.flag = flag;
     }
 
-    public CalendarAdapter(Context context, ArrayList<Date> days, HashSet<Date> eventDays, Calendar calendar)
+    public CalendarAdapter(Context context, ArrayList<DateCell> days, HashSet<Date> eventDays, Calendar calendar)
     {
         super(context, R.layout.custom_calendar_day, days);
         this.eventDays = eventDays;
@@ -54,8 +54,8 @@ class CalendarAdapter extends ArrayAdapter<Date> {
 
         // day in question
         Calendar calendar = Calendar.getInstance();
-        Date date = getItem(position);
-        calendar.setTime(date);
+        DateCell date = getItem(position);
+        calendar.setTime(date.getDate());
         int day = calendar.get(Calendar.DATE);
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
@@ -71,7 +71,6 @@ class CalendarAdapter extends ArrayAdapter<Date> {
 
 
         TextView customTextView = view.findViewById(R.id.datetxt);
-
         customTextView.setTypeface(null, Typeface.NORMAL);
 
 
@@ -144,7 +143,6 @@ class CalendarAdapter extends ArrayAdapter<Date> {
 
     public void setWeekColor(List<View> sviews) {
 
-
         if(sviews.size()==1){
             sviews.get(0).setBackgroundResource(R.drawable.single);
         } else {
@@ -204,9 +202,9 @@ class CalendarAdapter extends ArrayAdapter<Date> {
 
 
 
-    public void addMonthWeek(Date date,View v){
+    public void addMonthWeek(DateCell date,View v){
 
-        int weeknumber = getWeeknumber(date);
+        int weeknumber = getWeeknumber(date.getDate());
         Log.d("WeekOOO",String.valueOf(date)+" weeknumber "+weeknumber);
 
         if(monthWeekPair.containsKey(weeknumber)){
