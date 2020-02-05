@@ -44,28 +44,15 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
 
 
         holder.itemView.setOnClickListener {
+            if(selectedView != null && selectedView.size >0){
+                resetColor(selectedView)
+            }
             when(flag){
-                0 -> {
-                    if(selectedView != null && selectedView.size >0){
-                        resetColor(selectedView)
-                    }
-                    selectedView.add(position)
+                0 -> { selectedView.add(position)
                     updateSingleDate()
                 }
-                1 -> {
-                    if(selectedView != null && selectedView.size >0){
-                        resetColor(selectedView)
-                    }
-
-                    setColorSelectedWeek(getRow(position))
-                }
-                2 -> {
-                    if(selectedView != null && selectedView.size >0){
-                        resetColor(selectedView)
-                    }
-
-                    selectedMonth()
-                }
+                1 -> { setColorSelectedWeek(getRow(position)) }
+                2 -> { selectedMonth() }
             }
         }
 
@@ -112,14 +99,13 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
     fun setColorSelectedWeek(week: Int) {
         var min:Int
         var max :Int
-        selectedView = ArrayList()
-        if (week < 5) {
+        if (week < (dataCellList.size /7)) {
              min = 7 * week
              max = min + 7
 
         } else {
-             min = 7 * 5
-             max = dataCellList.size - min
+             min = 7 * (dataCellList.size /7)
+             max = dataCellList.size
         }
         for (i in min until max) {
             selectedView.add(i)
