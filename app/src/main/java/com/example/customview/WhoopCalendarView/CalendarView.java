@@ -30,7 +30,6 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
     int flag=0;
     Context context;
 
-    CalendarAdapter calendarAdapter;
     CalendarUIAdapter calendarUIAdapter;
 
     public CalendarView(Context context, AttributeSet attrs) {
@@ -95,12 +94,12 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         if(v.getId() == R.id.calendar_prev_button){
 
             updateTheCalendar(-1);
-        //    calendarAdapter.setMonthViews(new ArrayList<View>());
+
         } else {
             updateTheCalendar(1);
 
         }
-      //  calendarAdapter.setMonthViews(new ArrayList<View>());
+        calendarUIAdapter.setMonthViews(new ArrayList<GridCellData>());
         calendarUIAdapter.notifyDataSetChanged();
     }
 

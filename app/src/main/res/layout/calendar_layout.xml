@@ -14,11 +14,11 @@
 
     <ImageView
         android:id="@+id/calendar_prev_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginRight="40dp"
         android:layout_centerVertical="true"
-        android:padding="6dp"
+        android:padding="10dp"
         android:src="@drawable/ic_arrow_up"
         app:layout_constraintEnd_toStartOf="@+id/date_display_date"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,11 +43,11 @@
 
     <ImageView
         android:id="@+id/calendar_next_button"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="40dp"
-        android:padding="6dp"
+        android:padding="10dp"
         android:src="@drawable/ic_arrow_down"
         app:layout_constraintStart_toEndOf="@+id/date_display_date"
         app:layout_constraintTop_toTopOf="parent"
@@ -114,7 +114,6 @@ android:orientation="horizontal">
         android:gravity="center_horizontal"
         android:textColor="#222222"
         android:text="SUN"/>
-
 
 </LinearLayout>
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.customview.R
 import java.util.*
@@ -20,11 +19,8 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
     var selectedInstance: Calendar? = null
     var selectedView: ArrayList<GridCellData> = ArrayList()
     var viewList: ArrayList<GridCellData> = ArrayList()
-
-    fun setNewDateCellList(dateCellList:ArrayList<DateCell>){
-        this.dateCellList = dateCellList
-
-    }
+    var monthViews: ArrayList<GridCellData> = ArrayList()
+    var monthWeekPair = HashMap<Int,ArrayList<GridCellData>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DateCellViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -56,6 +52,8 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
 
         if (month == calendarToday.get(Calendar.MONTH) && year == calendarToday.get(Calendar.YEAR)) {
             textView.setTextColor(Color.parseColor(datecell.textColor))
+            monthViews.add(GridCellData(holder,dateCellList[position]))
+            addMonthWeek(GridCellData(holder,dateCellList[position]))
         } else {
             datecell.textColor = "#E0E0E0"
             dateCellList[position] = datecell
@@ -87,6 +85,13 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
                     selectedView = ArrayList<GridCellData>()
                 }
                 setColorSelectedWeek(getRow(position))
+            } else if(flag == 2){
+
+                if (selectedView.size > 0) {
+                    resetColor(selectedView, R.color.transparent)
+                    selectedView = ArrayList<GridCellData>()
+                }
+                selectedMonth()
             }
         }
 
@@ -101,10 +106,10 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
             gridCellData.dateCell.backgroundResource = R.color.transparent
             if(gridCellData.dateCell.textColor == "#E0E0E0"){
                 color = "#E0E0E0"
-                selectedView[i].dateCell.textColor ="#E0E0E0"
+                //selectedView[i].dateCell.textColor ="#E0E0E0"
             } else {
                 color = "#000000"
-                selectedView[i].dateCell.textColor ="#000000"
+                //selectedView[i].dateCell.textColor ="#000000"
             }
             gridCellData.dataCellViewHolder.itemView.findViewById<TextView>(R.id.datetxt).setTextColor(Color.parseColor(color))
 
@@ -119,6 +124,7 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
             val max = min + 7
             for (i in min until max) {
                 selectedView.add(viewList.get(i))
+                Log.d("WeekOOO", dateCellList[i].date.toString() + " weeknumber " + week)
             }
             setWeekColor(selectedView)
         }
@@ -142,17 +148,48 @@ class CalendarUIAdapter(var dateCellList:ArrayList<DateCell>)
             d2.dataCellViewHolder.itemView.findViewById<TextView>(R.id.datetxt).setTextColor(Color.parseColor("#EE0202"))
 
             for (i in 1 until sviews.size - 1) {
-                d2 = sviews[i]
-                d2.dataCellViewHolder.itemView.setBackgroundResource(R.drawable.middle)
-                d2.dataCellViewHolder.itemView.findViewById<TextView>(R.id.datetxt).setTextColor(Color.parseColor("#EE0202"))
+                var view : View = sviews[i].dataCellViewHolder.itemView
+                view.setBackgroundResource(R.drawable.middle)
+                view.findViewById<TextView>(R.id.datetxt).setTextColor(Color.parseColor("#EE0202"))
             }
             d2 = sviews[sviews.size - 1]
             d2.dataCellViewHolder.itemView.setBackgroundResource(R.drawable.end)
             d2.dataCellViewHolder.itemView.findViewById<TextView>(R.id.datetxt).setTextColor(Color.parseColor("#EE0202"))
         }
 
-       // notifyDataSetChanged()
     }
 
+    fun selectedMonth() {
+        selectedView.addAll(monthViews)
+        setWeekMonthColor()
+    }
 
+    fun setWeekMonthColor() {
+        for (key in monthWeekPair.keys) {
+            setWeekColor(monthWeekPair.get(key) as ArrayList<GridCellData>)
+        }
+    }
+
+    fun addMonthWeek(gridCellData: GridCellData) {
+        val weeknumber: Int = getWeeknumber(gridCellData.dateCell.date)
+
+        if (monthWeekPair.containsKey(weeknumber)) {
+            val viewArrayList: ArrayList<GridCellData>? = monthWeekPair[weeknumber]
+            if (!viewArrayList!!.contains(gridCellData)) {
+                viewArrayList.add(gridCellData)
+            }
+            monthWeekPair[weeknumber] = viewArrayList
+        } else {
+            val viewArrayList = java.util.ArrayList<GridCellData>()
+            viewArrayList.add(gridCellData)
+            monthWeekPair[weeknumber] = viewArrayList
+        }
+    }
+
+    fun getWeeknumber(d: Date?): Int {
+        val c = Calendar.getInstance()
+        c.firstDayOfWeek = Calendar.MONDAY
+        c.time = d
+        return c[Calendar.WEEK_OF_MONTH]
+    }
 }
