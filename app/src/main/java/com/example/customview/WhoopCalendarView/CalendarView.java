@@ -67,15 +67,27 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
+        Calendar nextMonth = (Calendar) calendar.clone();
+        nextMonth.add(Calendar.MONTH,1);
+
         while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
             calendar.add(Calendar.DATE, -1);
         }
 
-        while (cells.size() < 38)
-        {
+        for(int i=0;i<38;i++){
 
-            cells.add(new DateCell(calendar.getTime(),"#000000"));
+            cells.add(new DateCell(calendar.getTime(),
+                    "#000000",
+                    R.color.transparent, i,
+                    isCurrentMonth(calendar),
+                    false,
+                    false));
+
             calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+            if (calendar.compareTo(nextMonth) >= 0) {
+                break;
+            }
         }
 
     calendarUIAdapter = new CalendarUIAdapter(cells);
@@ -99,7 +111,6 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
             updateTheCalendar(1);
 
         }
-        calendarUIAdapter.setMonthViews(new ArrayList<GridCellData>());
         calendarUIAdapter.notifyDataSetChanged();
     }
 
@@ -108,11 +119,22 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         updateCalendar();
     }
 
+    public boolean isCurrentMonth(Calendar calendar){
+
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        if (month == currentDate.get(Calendar.MONTH) && year == currentDate.get(Calendar.YEAR)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public void setFlag(int flag) {
         this.flag = flag;
         calendarUIAdapter.setFlag(flag);
-        calendarUIAdapter.setSelectedView(new ArrayList<GridCellData>());
         calendarUIAdapter.notifyDataSetChanged();
     }
 }
