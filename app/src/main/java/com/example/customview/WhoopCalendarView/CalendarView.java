@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.customview.R;
 
 import java.text.SimpleDateFormat;
@@ -22,15 +25,17 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
     ImageView btnPrev;
     ImageView btnNext;
     TextView txtDisplayDate;
-    GridView gridView;
+    RecyclerView gridView;
     Calendar currentDate;
     int flag=0;
+    Context context;
 
-    CalendarAdapter calendarAdapter;
+    CalendarUIAdapter calendarUIAdapter;
 
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initControl(context, attrs);
+        this.context=context;
     }
 
     private void assignUiElements() {
@@ -57,61 +62,56 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
 
     public void updateCalendar()
     {
-        ArrayList<Date> cells = new ArrayList<>();
+        ArrayList<DateCell> cells = new ArrayList<>();
         Calendar calendar = (Calendar)currentDate.clone();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
-        // determine the cell for current month's beginning
-
-
-
-       // int monthBeginningCell = calendar.get(Calendar.DAY_OF_WEEK);
-
-
+        Calendar nextMonth = (Calendar) calendar.clone();
+        nextMonth.add(Calendar.MONTH,1);
 
         while (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
             calendar.add(Calendar.DATE, -1);
         }
 
-        //Log.d("Month010",String.valueOf(monthBeginningCell));
+        for(int i=0;i<38;i++){
 
-        // move calendar backwards to the beginning of the week
-       // calendar.add(Calendar.DAY_OF_MONTH, -monthBeginningCell);
+            cells.add(new DateCell(calendar.getTime(),
+                    "#000000",
+                    R.color.transparent, i,
+                    isCurrentMonth(calendar),
+                    false,
+                    false));
 
-
-        // fill cells
-        while (cells.size() < 38)
-        {
-            cells.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
+
+            if (calendar.compareTo(nextMonth) >= 0) {
+                break;
+            }
         }
 
-        // update grid
-
-        calendarAdapter = new CalendarAdapter(getContext(),
-                cells, new HashSet<Date>(),currentDate);
-        calendarAdapter.setFlag(flag);
-        gridView.setAdapter(calendarAdapter);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM yyyy");
-        String[] dateToday = sdf.format(currentDate.getTime()).split(",");
-        txtDisplayDate.setText(dateToday[1]);
+    calendarUIAdapter = new CalendarUIAdapter(cells);
+    calendarUIAdapter.setSelectedInstance(currentDate);
+    calendarUIAdapter.setFlag(flag);
+    gridView.setLayoutManager(new GridLayoutManager(context, 7, RecyclerView.VERTICAL, false));
+    gridView.setAdapter(calendarUIAdapter);
+    SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM yyyy");
+    String[] dateToday = sdf.format(currentDate.getTime()).split(",");
+    txtDisplayDate.setText(dateToday[1]);
     }
 
 
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.calendar_prev_button){
+
             updateTheCalendar(-1);
-            calendarAdapter.setMonthViews(new ArrayList<View>());
-            calendarAdapter.notifyDataSetChanged();
+
         } else {
             updateTheCalendar(1);
 
         }
-        calendarAdapter.setMonthViews(new ArrayList<View>());
-        calendarAdapter.notifyDataSetChanged();
+        calendarUIAdapter.notifyDataSetChanged();
     }
 
     public void updateTheCalendar(int month){
@@ -119,10 +119,22 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         updateCalendar();
     }
 
+    public boolean isCurrentMonth(Calendar calendar){
+
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        if (month == currentDate.get(Calendar.MONTH) && year == currentDate.get(Calendar.YEAR)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public void setFlag(int flag) {
         this.flag = flag;
-        calendarAdapter.setFlag(flag);
-        calendarAdapter.notifyDataSetChanged();
+        calendarUIAdapter.setFlag(flag);
+        calendarUIAdapter.notifyDataSetChanged();
     }
 }
