@@ -3,11 +3,12 @@ package com.example.customview.WhoopCalendarView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +18,6 @@ import com.example.customview.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 
 public class CalendarView extends LinearLayout implements View.OnClickListener {
     LinearLayout header;
@@ -31,6 +30,12 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
     Context context;
 
     CalendarUIAdapter calendarUIAdapter;
+
+    int MIN_DISTANCE = 100;
+    float downX = 0.0f;
+    float downY = 0.0f;
+    float upX = 0.0f;
+    float upY = 0.0f;
 
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -95,6 +100,55 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
     calendarUIAdapter.setFlag(flag);
     gridView.setLayoutManager(new GridLayoutManager(context, 7, RecyclerView.VERTICAL, false));
     gridView.setAdapter(calendarUIAdapter);
+
+        gridView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN: {
+                        downX = event.getX();
+                        downY = event.getY();
+                        return true;
+                    }
+                    case MotionEvent.ACTION_UP: {
+                        upX = event.getX();
+                        upY = event.getY();
+
+                        float deltaX = downX - upX;
+                        float deltaY = downY - upY;
+
+                        if (Math.abs(deltaX) > MIN_DISTANCE) {
+                            // left or right
+                            if (deltaX < 0) {
+                                onLeftToRightSwipe(v);
+                                return true;
+                            }
+                            if (deltaX > 0) {
+                                onRightToLeftSwipe(v);
+                                return true;
+                            }
+                        }
+
+                        if (Math.abs(deltaY) > MIN_DISTANCE) {
+                            // top or down
+                            if (deltaY < 0) {
+                                onTopToBottomSwipe(v);
+                                return true;
+                            }
+                            if (deltaY > 0) {
+                                onBottomToTopSwipe(v);
+                                return true;
+                            }
+                        }
+
+                        return false; // no swipe horizontally and no swipe vertically
+                    }
+                }
+                return false;
+            }
+        });
+
+
     SimpleDateFormat sdf = new SimpleDateFormat("EEEE,MMMM yyyy");
     String[] dateToday = sdf.format(currentDate.getTime()).split(",");
     txtDisplayDate.setText(dateToday[1]);
@@ -136,5 +190,28 @@ public class CalendarView extends LinearLayout implements View.OnClickListener {
         this.flag = flag;
         calendarUIAdapter.setFlag(flag);
         calendarUIAdapter.notifyDataSetChanged();
+    }
+
+    public void onRightToLeftSwipe(View v) {
+        updateTheCalendar(1);
+        Toast.makeText(v.getContext(), "RightToLeftSwipe", Toast.LENGTH_SHORT).show();
+        // activity.doSomething();
+    }
+
+    public void onLeftToRightSwipe(View v) {
+        updateTheCalendar(-1);
+        Toast.makeText(v.getContext(), "LeftToRightSwipe", Toast.LENGTH_SHORT).show();
+        // activity.doSomething();
+    }
+
+    public void onTopToBottomSwipe(View v) {
+
+        Toast.makeText(v.getContext(), "onTopToBottomSwipe", Toast.LENGTH_SHORT).show();
+        // activity.doSomething();
+    }
+
+    public void onBottomToTopSwipe(View v) {
+        Toast.makeText(v.getContext(), "onBottomToTopSwipe", Toast.LENGTH_SHORT).show();
+        // activity.doSomething();
     }
 }

@@ -7,7 +7,8 @@
     <size android:height="24dp"/>
     <stroke android:width="3dp" android:color="#EE0202"/>
     <solid android:color="#00ffffff" />
-    <corners android:topLeftRadius="200dp"
-        android:bottomLeftRadius="200dp" />
+    <corners
+        android:topLeftRadius="100dp"
+        android:bottomLeftRadius="100dp" />
 </shape>
 </inset>

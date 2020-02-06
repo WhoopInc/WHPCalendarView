@@ -1,11 +1,9 @@
 package com.example.customview.WhoopCalendarView
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.customview.R
 import java.util.*
@@ -125,7 +123,7 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
             var dateCell = dataCellList[sviews[0]]
             dateCell.currentWeek = true
             dateCell.textColor = "#EE0202"
-            dateCell.backgroundResource = R.drawable.circle
+            dateCell.backgroundResource = R.drawable.single
 
             dataCellList[sviews[0]] = dateCell
 

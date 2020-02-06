@@ -59,6 +59,7 @@
 android:id="@+id/calendar_header"
 android:layout_width="match_parent"
 android:layout_height="30dp"
+    android:layout_marginBottom="5dp"
 android:gravity="center_vertical"
 android:orientation="horizontal">
 
@@ -68,6 +69,7 @@ android:orientation="horizontal">
     android:layout_weight="1"
     android:gravity="center_horizontal"
     android:textColor="#222222"
+    android:textStyle="bold"
     android:text="MON"/>
 
     <TextView
@@ -76,6 +78,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="TUE"/>
 
     <TextView
@@ -84,6 +87,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="WED"/>
 
     <TextView
@@ -92,6 +96,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="THU"/>
     <TextView
         android:layout_width="0dp"
@@ -99,6 +104,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="FRI"/>
     <TextView
         android:layout_width="0dp"
@@ -106,6 +112,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="SAT"/>
     <TextView
         android:layout_width="0dp"
@@ -113,6 +120,7 @@ android:orientation="horizontal">
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:textColor="#222222"
+        android:textStyle="bold"
         android:text="SUN"/>
 
 </LinearLayout>
@@ -121,7 +129,6 @@ android:orientation="horizontal">
 android:id="@+id/calendar_grid"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-    android:verticalSpacing="5dp"
     android:numColumns="7"/>
 
 </LinearLayout>
