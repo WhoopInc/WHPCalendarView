@@ -6,5 +6,5 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.customview.R
 
 class DateCellViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-    val textView : TextView = itemView.findViewById(R.id.datetxt)
+    val textView : TextView = itemView.findViewById(R.id.dateTxt)
 }

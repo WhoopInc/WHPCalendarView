@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
     tools:context=".MainActivity">
 
     <com.example.customview.WhoopCalendarView.CalendarView
@@ -12,33 +13,34 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
- <RadioGroup
-     android:id="@+id/radioGroup"
-     android:layout_width="match_parent"
-     android:layout_height="wrap_content"
-     android:checkedButton="@id/daily"
-     android:layout_marginTop="50dp"
-     app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-     <RadioButton
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:id="@+id/daily"
-         android:text="Daily" />
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:checkedButton="@id/daily"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-     <RadioButton
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:id="@+id/weekly"
-         android:text="Weekly" />
+        <RadioButton
+            android:id="@+id/daily"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/daily" />
 
-     <RadioButton
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:id="@+id/monthly"
-         android:text="Monthly" />
+        <RadioButton
+            android:id="@+id/weekly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/weekly" />
 
- </RadioGroup>
+        <RadioButton
+            android:id="@+id/monthly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/monthly" />
+
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

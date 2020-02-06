@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Custom Calendar</string>
+    <string name="daily">Daily</string>
+    <string name="monthly">Monthly</string>
+    <string name="weekly">Weekly</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="sun">SUN</string>
+    <string name="_17_feb">17 Feb</string>
+    <string name="previous_month">previous month</string>
+    <string name="next_month">next month</string>
 </resources>

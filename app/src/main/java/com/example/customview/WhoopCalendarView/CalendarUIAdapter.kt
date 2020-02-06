@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
     : RecyclerView.Adapter<DateCellViewHolder>(){
 
-    var flag = 0
+    var flag : Int = 0
     var selectedInstance: Calendar? = null
     var monthWeekPair = HashMap<Int,ArrayList<Int>>()
     var selectedView = ArrayList<Int>()
@@ -32,7 +32,11 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
         var calendar : Calendar = Calendar.getInstance()
         calendar.time = dateCell.date
 
-        holder.textView.text = calendar.get(Calendar.DATE).toString()
+        holder.textView.text = if(calendar.get(Calendar.DATE).toString().length == 1) {
+            "0" + calendar.get(Calendar.DATE).toString()
+        } else {
+            calendar.get(Calendar.DATE).toString()
+        }
         if(dateCell.currentMonth || dateCell.selectedDay || dateCell.currentWeek ){
             holder.textView.setTextColor(Color.parseColor(dateCell.textColor))
         } else {
@@ -42,7 +46,7 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
 
 
         holder.itemView.setOnClickListener {
-            if(selectedView != null && selectedView.size >0){
+            if(selectedView.size >0){
                 resetColor(selectedView)
             }
             when(flag){
@@ -136,12 +140,12 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
             dataCellList[sviews[0]] = dateCell
 
             for (i in 1 until sviews.size - 1) {
-                var dateCell = dataCellList[sviews[i]]
-                dateCell.currentWeek = true
-                dateCell.textColor = "#EE0202"
-                dateCell.backgroundResource = R.drawable.middle
+                var dateCellMid = dataCellList[sviews[i]]
+                dateCellMid.currentWeek = true
+                dateCellMid.textColor = "#EE0202"
+                dateCellMid.backgroundResource = R.drawable.middle
 
-                dataCellList[sviews[i]] = dateCell
+                dataCellList[sviews[i]] = dateCellMid
             }
             dateCell = dataCellList[sviews[sviews.size - 1]]
             dateCell.currentWeek = true
@@ -155,13 +159,13 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
 
 
 
-   fun setWeekMonthColor() {
+   private fun setWeekMonthColor() {
         for (key in monthWeekPair.keys) {
             setWeekColor(monthWeekPair[key] as ArrayList<Int>)
         }
     }
 
-   fun selectedMonth() {
+   private fun selectedMonth() {
        for(position in dataCellList.indices){
            if(dataCellList[position].currentMonth){
                selectedView.add(position)
@@ -171,8 +175,8 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
         setWeekMonthColor()
     }
 
-    fun addMonthWeek(position: Int) {
-        val weeknumber: Int = getWeeknumber(dataCellList[position].date)
+    private fun addMonthWeek(position: Int) {
+        val weeknumber: Int = getWeekNumber(dataCellList[position].date)
 
         if (monthWeekPair.containsKey(weeknumber)) {
             val viewArrayList: ArrayList<Int>? = monthWeekPair[weeknumber]
@@ -187,10 +191,10 @@ class CalendarUIAdapter(var dataCellList : ArrayList<DateCell>)
         }
     }
 
-    fun getWeeknumber(d: Date?): Int {
+    private fun getWeekNumber(date: Date): Int {
         val c = Calendar.getInstance()
         c.firstDayOfWeek = Calendar.MONDAY
-        c.time = d
+        c.time = date
         return c[Calendar.WEEK_OF_MONTH]
     }
 
